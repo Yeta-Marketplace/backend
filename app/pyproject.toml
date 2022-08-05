@@ -11,6 +11,10 @@ uvicorn = "^0.18.2"
 SQLAlchemy = "^1.4.39"
 psycopg2-binary = "^2.9.3"
 alembic = "^1.8.1"
+tenacity = "^8.0.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = "^1.7.4"
+pydantic = {extras = ["email"], version = "^1.9.1"}
 
 [tool.poetry.dev-dependencies]
 
