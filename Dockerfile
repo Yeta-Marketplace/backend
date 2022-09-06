@@ -1,5 +1,5 @@
 # =========== Requirements Stage ===================
-FROM python:3.9-slim as requirements-stage
+FROM python:3.9 as requirements-stage
 
 WORKDIR /tmp
 
