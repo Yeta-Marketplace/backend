@@ -12,9 +12,9 @@ class UserBase(SQLModel):
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    full_name: str = Field(index=True)
+    full_name: Optional[str] = Field(default=None, index=True)
     hashed_password: str
-    is_superuser: bool
+    is_superuser: bool = False
 
 
 class UserCreate(UserBase):
