@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.get("/", response_model=List[models.UserRead])
 def read_users(
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
     skip: int = 0,
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_superuser),
@@ -30,7 +30,7 @@ def read_users(
 @router.post("/", response_model=models.UserRead)
 def create_user(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
     user_in: models.UserCreate,
     current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
@@ -54,7 +54,7 @@ def create_user(
 @router.put("/me", response_model=models.UserRead)
 def update_user_me(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
     password: str = Body(None),
     full_name: str = Body(None),
     email: EmailStr = Body(None),
@@ -77,7 +77,7 @@ def update_user_me(
 
 @router.get("/me", response_model=models.UserRead)
 def read_user_me(
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
@@ -89,7 +89,7 @@ def read_user_me(
 @router.post("/open", response_model=models.UserRead)
 def create_user_open(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
     password: str = Body(...),
     email: EmailStr = Body(...),
     full_name: str = Body(None),
@@ -117,7 +117,7 @@ def create_user_open(
 def read_user_by_id(
     user_id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
 ) -> Any:
     """
     Get a specific user by id.
@@ -135,7 +135,7 @@ def read_user_by_id(
 @router.put("/{user_id}", response_model=models.UserRead)
 def update_user(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_session),
     user_id: int,
     user_in: models.UserUpdate,
     current_user: models.User = Depends(deps.get_current_active_superuser),
