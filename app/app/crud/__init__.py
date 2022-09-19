@@ -8,3 +8,4 @@
 # product = CRUDBase[Product, ProductCreate, ProductUpdate](Product)
 
 from .crud_user import user
+from .crud_yardsale import yardsale

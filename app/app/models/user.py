@@ -1,8 +1,11 @@
 
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 
+
+if TYPE_CHECKING:
+    from .yard_sale import YardSale
 
 class UserBase(SQLModel):
     email: EmailStr = Field(index=True)
@@ -15,6 +18,8 @@ class User(UserBase, table=True):
     full_name: Optional[str] = Field(default=None, index=True)
     hashed_password: str
     is_superuser: bool = False
+
+    yard_sales: list["YardSale"] = Relationship(back_populates="user")
 
 
 class UserCreate(UserBase):
