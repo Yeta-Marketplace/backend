@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 class YardSaleBase(SQLModel):
     description: Optional[str]
 
-    latitude: int = Field(ge=-90, le=90)
-    longitude: int = Field(ge=-180, le=180)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
 
     start_date: date
     end_date: date
