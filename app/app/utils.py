@@ -8,6 +8,7 @@ from emails.template import JinjaTemplate
 from jose import jwt
 
 from app.core.config import settings
+from app.custom_types.email_str import EmailStr
 
 
 def send_email(
@@ -46,7 +47,7 @@ def send_test_email(email_to: str) -> None:
     )
 
 
-def send_reset_password_email(email_to: str, email: str, token: str) -> None:
+def send_reset_password_email(email_to: str, email: EmailStr, token: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Password recovery for user {email}"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "reset_password.html") as f:
@@ -87,7 +88,7 @@ def send_new_account_email(email_to: str, username: str, password: str) -> None:
     )
 
 
-def generate_password_reset_token(email: str) -> str:
+def generate_password_reset_token(email: EmailStr) -> str:
     delta = timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)
     now = datetime.utcnow()
     expires = now + delta

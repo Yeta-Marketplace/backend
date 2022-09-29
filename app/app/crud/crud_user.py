@@ -1,5 +1,5 @@
 from typing import Optional
-
+from app.custom_types import EmailStr
 from sqlmodel import Session, select
 
 from app.models import User, UserCreate, UserUpdate
@@ -8,7 +8,7 @@ from .base import CRUDBase
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
-    def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
+    def get_by_email(self, db: Session, *, email: EmailStr) -> Optional[User]:
         return db.exec(select(User).where(User.email == email)).first()
     
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
@@ -36,7 +36,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
+    def authenticate(self, db: Session, *, email: EmailStr, password: str) -> Optional[User]:
         user = self.get_by_email(db, email=email)
         if not user:
             return None

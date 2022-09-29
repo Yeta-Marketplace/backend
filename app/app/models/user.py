@@ -1,6 +1,6 @@
 
 from typing import TYPE_CHECKING, Optional
-from pydantic import EmailStr
+from app.custom_types import EmailStr
 from sqlmodel import Field, SQLModel, Relationship
 
 

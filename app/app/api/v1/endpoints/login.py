@@ -1,6 +1,9 @@
 from datetime import timedelta
 from typing import Any
 
+from app.custom_types import EmailStr
+import email_validator
+
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -26,8 +29,13 @@ def login_access_token(
     """
     OAuth2 compatible token login, get an access token for future requests
     """
+    try:
+        email = EmailStr.validate(form_data.username)
+    except email_validator.EmailNotValidError as e:
+        raise HTTPException(status_code=400, detail="Username must be a valid email")
+
     user = crud.user.authenticate(
-        db, email=form_data.username, password=form_data.password
+        db, email=email, password=form_data.password
     )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
@@ -51,7 +59,7 @@ def test_token(current_user: models.User = Depends(deps.get_current_user)) -> An
 
 
 @router.post("/password-recovery/{email}", response_model=models.Msg)
-def recover_password(email: str, db: Session = Depends(deps.get_session)) -> Any:
+def recover_password(email: EmailStr, db: Session = Depends(deps.get_session)) -> Any:
     """
     Password Recovery
     """
