@@ -20,14 +20,15 @@ def is_located_in_US(latitude, longitude):
 @router.get("/", response_model=List[models.YardSaleRead])
 def read_yardsales(
     db: Session = Depends(deps.get_session),
+    location: models.Location = Depends(),
+    distance: float = 25,
     skip: int = 0,
     limit: int = 100,
-    # current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Retrieve yard sales.
     """
-    yardsales = crud.yardsale.get_multi(db, skip=skip, limit=limit)
+    yardsales = crud.yardsale.get_multi_near_location(db, location=location, distance=distance, skip=skip, limit=limit)
     return yardsales
 
 
