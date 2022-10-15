@@ -9,3 +9,4 @@
 
 from .crud_user import user
 from .crud_yardsale import yardsale
+from .crud_feedback import feedback

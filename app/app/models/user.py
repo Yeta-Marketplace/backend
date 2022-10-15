@@ -6,6 +6,7 @@ from sqlmodel import Field, SQLModel, Relationship
 
 if TYPE_CHECKING:
     from .yard_sale import YardSale
+    from .feedback import Feedback
 
 class UserBase(SQLModel):
     email: EmailStr = Field(index=True)
@@ -20,6 +21,7 @@ class User(UserBase, table=True):
     is_superuser: bool = False
 
     yard_sales: list["YardSale"] = Relationship(back_populates="user")
+    feedbacks: list["Feedback"] = Relationship(back_populates="user")
 
 
 class UserCreate(UserBase):
