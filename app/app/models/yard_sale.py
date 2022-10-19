@@ -1,7 +1,7 @@
 
 from typing import TYPE_CHECKING, Optional
 from sqlmodel import Field, SQLModel, Relationship
-from datetime import datetime
+from datetime import date
 
 if TYPE_CHECKING:
     from .user import User
@@ -13,8 +13,8 @@ class YardSaleBase(SQLModel):
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
 
-    start_date: datetime
-    end_date: datetime
+    start_date: date
+    end_date: date
 
 
 class YardSale(YardSaleBase, table=True):
@@ -35,5 +35,5 @@ class YardSaleRead(YardSaleBase):
 class YardSaleUpdate(SQLModel):
     description: Optional[str]
 
-    start_date: Optional[datetime]
-    end_date: Optional[datetime]
+    start_date: Optional[date]
+    end_date: Optional[date]
