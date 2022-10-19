@@ -5,6 +5,11 @@ from starlette.middleware.cors import CORSMiddleware
 from app.api.v1.api import api_router
 from app.core.config import settings
 
+from logging.config import dictConfig
+from app.core import log_config
+
+
+dictConfig(log_config.sample_logger)
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
@@ -26,4 +31,4 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def read_root():
-    return {"hello": "world"}
+    return {"for documentaion go to": "/docs"}
