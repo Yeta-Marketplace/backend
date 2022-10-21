@@ -2,6 +2,7 @@
 from typing import TYPE_CHECKING, Optional
 from app.custom_types import EmailStr
 from sqlmodel import Field, SQLModel, Relationship
+from datetime import datetime
 
 
 if TYPE_CHECKING:
@@ -19,6 +20,8 @@ class User(UserBase, table=True):
     full_name: Optional[str] = Field(default=None, index=True)
     hashed_password: str
     is_superuser: bool = False
+
+    created_on: datetime = Field(default_factory=datetime.utcnow)
 
     yard_sales: list["YardSale"] = Relationship(back_populates="user")
     feedbacks: list["Feedback"] = Relationship(back_populates="user")

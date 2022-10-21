@@ -1,7 +1,7 @@
 
 from typing import TYPE_CHECKING, Optional
 from sqlmodel import Field, SQLModel, Relationship
-from datetime import date
+from datetime import date, datetime
 
 if TYPE_CHECKING:
     from .user import User
@@ -15,6 +15,8 @@ class YardSaleBase(SQLModel):
 
     start_date: date
     end_date: date
+
+    created_on: datetime = Field(default_factory=datetime.utcnow)
 
 
 class YardSale(YardSaleBase, table=True):
