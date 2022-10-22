@@ -87,6 +87,27 @@ def send_new_account_email(email_to: str, username: str, password: str) -> None:
         },
     )
 
+def send_admin_email_feedback(
+    user_email: str,
+    feedback_id: int,
+    feedback_description: str,
+    admin_email: str = settings.EMAILS_ADMIN_EMAIL,
+) -> None:
+    admin_email = settings.EMAILS_ADMIN_EMAIL
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_feedback.html") as f:
+        template_str = f.read()
+    send_email(
+        email_to=admin_email,
+        subject_template=admin_email,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "user_email": user_email,
+            "feedback_id": feedback_id,
+            "feedback_description": feedback_description,
+        },
+    )
+
 
 def generate_password_reset_token(email: EmailStr) -> str:
     delta = timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)

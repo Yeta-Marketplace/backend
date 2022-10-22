@@ -1,4 +1,5 @@
 
+from app.utils import send_admin_email_feedback
 from .base import CRUDBase
 from sqlmodel import Session
 
@@ -11,6 +12,12 @@ class CRUDFeedback(CRUDBase[Feedback, FeedbackCreate, FeedbackUpdate]):
         db.add(new_feedback)
         db.commit()
         db.refresh(new_feedback)
+
+        send_admin_email_feedback(
+            user_email=new_feedback.user.email, 
+            feedback_id=new_feedback.id, 
+            feedback_description=new_feedback.description
+        )
         return new_feedback
 
 feedback = CRUDFeedback(Feedback)

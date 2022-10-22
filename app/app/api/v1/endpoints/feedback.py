@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 from app import crud, models
 from app.api import deps
 from app.core.config import settings
-from app.utils import send_new_account_email
 
 router = APIRouter()
 
