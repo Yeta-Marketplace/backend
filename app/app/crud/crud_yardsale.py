@@ -1,4 +1,5 @@
 from typing import List
+from datetime import date
 
 import sqlalchemy
 from .base import CRUDBase
@@ -21,39 +22,17 @@ class CRUDYardSale(CRUDBase[YardSale, YardSaleCreate, YardSaleUpdate]):
     ) -> List[YardSale]:
         """
         distance in miles
-
-        37   - LAT
-        -122 - LONG
-
-        SELECT *
-        FROM (
-            SELECT 
-                id,
-                (
-                    3959 *
-                    ACOS(
-                        COS(RADIANS( LAT )) * 
-                        COS(RADIANS(latitude)) * 
-                        COS(
-                            RADIANS(longitude) - 
-                            RADIANS( LONG )
-                        ) + 
-                        SIN(RADIANS( LAT )) * 
-                        SIN(RADIANS(latitude))
-                    )
-                ) AS distance
-            FROM "yardsale"
-        ) as ys
-        WHERE distance < 100
-        ORDER BY distance LIMIT 20 OFFSET 0;
         """
         sin = sqlalchemy.func.SIN
         cos = sqlalchemy.func.COS
         acos = sqlalchemy.func.ACOS
         radians = sqlalchemy.func.RADIANS
 
-        statement = select(YardSale).where(
-            3959 * acos(
+        if distance >= 1000:
+            # Avoids expensive calculation
+            distance_filter = True
+        else:
+            distance_filter = (3959 * acos(
                 cos(radians(location.latitude)) * 
                 cos(radians(YardSale.latitude)) * 
                 cos(
@@ -62,8 +41,11 @@ class CRUDYardSale(CRUDBase[YardSale, YardSaleCreate, YardSaleUpdate]):
                 ) +
                 sin(radians(location.latitude)) *
                 sin(radians(YardSale.latitude))
-            ) < distance
-        ).offset(skip).limit(limit)
+            )) < distance
+
+        statement = select(YardSale).where(
+            (YardSale.end_date >= date.today()) & distance_filter
+        ).order_by(YardSale.end_date).offset(skip).limit(limit)
         results = db.exec(statement)
         return results.all()
 
