@@ -16,7 +16,6 @@ class YardSaleBase(SQLModel):
     start_date: date
     end_date: date
 
-    created_on: datetime = Field(default_factory=datetime.utcnow)
 
 
 class YardSale(YardSaleBase, table=True):
@@ -24,6 +23,8 @@ class YardSale(YardSaleBase, table=True):
 
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
     user: Optional["User"] = Relationship(back_populates="yard_sales")
+
+    created_on: datetime = Field(default_factory=datetime.utcnow)
 
 
 class YardSaleCreate(YardSaleBase):
