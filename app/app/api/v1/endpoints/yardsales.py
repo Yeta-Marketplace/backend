@@ -50,7 +50,7 @@ def create_yardsale(
 
 
 @router.post("/open", response_model=models.YardSaleRead)
-def create_yardsale(
+def create_yardsale_open(
     *,
     db: Session = Depends(deps.get_session),
     yardsale_in: models.YardSaleCreate,
