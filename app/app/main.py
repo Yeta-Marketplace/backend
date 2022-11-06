@@ -1,5 +1,6 @@
 
 from fastapi import FastAPI
+from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1.api import api_router
@@ -11,8 +12,13 @@ from app.core import log_config
 
 dictConfig(log_config.sample_logger)
 
+def custom_generate_unique_id(route: APIRoute):
+    return f"{route.tags[0]}-{route.name}"
+
+
 app = FastAPI(
-    title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    generate_unique_id_function=custom_generate_unique_id,
+    title=settings.PROJECT_NAME, # openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
 
