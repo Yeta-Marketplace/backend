@@ -25,7 +25,7 @@ class YardSale(YardSaleBase, table=True):
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
     user: Optional["User"] = Relationship(back_populates="yard_sales")
     
-    event_type_id: int = Field(default=None, foreign_key="eventtype.id", nullable=False)
+    event_type_id: int = Field(default=1, foreign_key="eventtype.id", nullable=False)
     event_type: "EventType" = Relationship(back_populates="events")
 
     created_on: datetime = Field(default_factory=datetime.utcnow)
