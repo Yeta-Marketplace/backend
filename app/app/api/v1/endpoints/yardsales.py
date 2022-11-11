@@ -49,18 +49,18 @@ def create_yardsale(
     return yardsale
 
 
-@router.post("/open", response_model=models.YardSaleRead)
-def create_yardsale_open(
-    *,
-    db: Session = Depends(deps.get_session),
-    yardsale_in: models.YardSaleCreate,
-) -> Any:
-    """
-    Create new yard sale.
-    """
-    if not is_located_in_US(yardsale_in.latitude, yardsale_in.longitude):
-        raise HTTPException(
-            status_code=400, detail="Only supports US locations."
-        )
-    yardsale = crud.yardsale.create(db, obj_in=yardsale_in)
-    return yardsale
+# @router.post("/open", response_model=models.YardSaleRead)
+# def create_yardsale_open(
+#     *,
+#     db: Session = Depends(deps.get_session),
+#     yardsale_in: models.YardSaleCreate,
+# ) -> Any:
+#     """
+#     Create new yard sale.
+#     """
+#     if not is_located_in_US(yardsale_in.latitude, yardsale_in.longitude):
+#         raise HTTPException(
+#             status_code=400, detail="Only supports US locations."
+#         )
+#     yardsale = crud.yardsale.create(db, obj_in=yardsale_in)
+#     return yardsale
