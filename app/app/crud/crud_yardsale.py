@@ -30,9 +30,9 @@ class CRUDYardSale(CRUDBase[YardSale, YardSaleCreate, YardSaleUpdate]):
 
         if distance >= 1000:
             # Avoids expensive calculation
-            distance_filter = True
+            distance_column = 0
         else:
-            distance_filter = (3959 * acos(
+            distance_column = (3959 * acos(
                 cos(radians(location.latitude)) * 
                 cos(radians(YardSale.latitude)) * 
                 cos(
@@ -41,11 +41,11 @@ class CRUDYardSale(CRUDBase[YardSale, YardSaleCreate, YardSaleUpdate]):
                 ) +
                 sin(radians(location.latitude)) *
                 sin(radians(YardSale.latitude))
-            )) < distance
+            ))
 
-        statement = select(YardSale).where(
-            (YardSale.end_date >= date.today()) & distance_filter
-        ).order_by(YardSale.end_date).offset(skip).limit(limit)
+        statement = select(YardSale).add_columns(distance_column.label('distance')).where(
+            (YardSale.end_date >= date.today()) & (distance_column < distance)
+        ).order_by(distance_column, YardSale.end_date).offset(skip).limit(limit)
         results = db.exec(statement)
         return results.all()
 
