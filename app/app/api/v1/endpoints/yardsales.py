@@ -13,7 +13,7 @@ router = APIRouter()
 
 # TODO: Move to utils
 def is_located_in_US(latitude, longitude):
-    return (25 <= latitude <= 50) and (-120 <= longitude <= -65)
+    return (20 <= latitude <= 60) and (-130 <= longitude <= -60)
 
 
 @router.get("/", response_model=List[models.YardSaleRead])
