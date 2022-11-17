@@ -1,5 +1,6 @@
 from typing import List
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import sqlalchemy
 from .base import CRUDBase
@@ -43,8 +44,10 @@ class CRUDYardSale(CRUDBase[YardSale, YardSaleCreate, YardSaleUpdate]):
                 sin(radians(YardSale.latitude))
             ))
 
+        today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
+
         statement = select(YardSale).add_columns(distance_column.label('distance')).where(
-            (YardSale.end_date >= date.today()) & (distance_column < distance)
+            (YardSale.end_date >= today) & (distance_column < distance)
         ).order_by(distance_column, YardSale.end_date).offset(skip).limit(limit)
         results = db.exec(statement)
         return results.all()
