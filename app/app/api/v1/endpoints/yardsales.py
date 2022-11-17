@@ -1,19 +1,28 @@
 from typing import Any, List
 
-from fastapi import APIRouter, Body, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app import crud, models
 from app.api import deps
-from app.core.config import settings
+# from app.utils import send_admin_email_feedback
 
 router = APIRouter()
 
+locations = {(39.95, -74.2)}  # Lat, Long
 
 # TODO: Move to utils
 def is_located_in_US(latitude, longitude):
     return (20 <= latitude <= 60) and (-130 <= longitude <= -60)
+
+def monitor_location(location: models.Location):
+    global locations
+    new_location = (round(location.latitude, 2), round(location.longitude, 2))
+    if new_location not in locations:
+        # Slows down too much, needs to run in a separate thread:
+        # send_admin_email_feedback('', -1, f'New Location!! lat: {new_location[0]}, long: {new_location[1]}')
+        print(f'New location!!  lat: {new_location[0]}, long: {new_location[1]}')
+        locations.add(new_location)
 
 
 @router.get("/", response_model=List[models.YardSaleRead])
@@ -27,6 +36,7 @@ def read_yardsales(
     """
     Retrieve yard sales.
     """
+    monitor_location(location)
     yardsales = crud.yardsale.get_multi_near_location(db, location=location, distance=distance, skip=skip, limit=limit)
     return yardsales
 
