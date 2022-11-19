@@ -51,10 +51,10 @@ def create_yardsale(
     """
     Create new yard sale.
     """
-    if not is_located_in_US(yardsale_in.latitude, yardsale_in.longitude):
-        raise HTTPException(
-            status_code=400, detail="Only supports US locations."
-        )
+    # if not is_located_in_US(yardsale_in.latitude, yardsale_in.longitude):
+    #     raise HTTPException(
+    #         status_code=400, detail="Only supports US locations."
+    #     )
     yardsale = crud.yardsale.create(db, obj_in=yardsale_in, user_id=current_user.id)
     return yardsale
 
