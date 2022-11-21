@@ -2,7 +2,7 @@ from datetime import timedelta
 from typing import Any
 
 from app.custom_types import EmailStr
-import email_validator
+from pydantic.errors import EmailError
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
@@ -31,7 +31,7 @@ def login_access_token(
     """
     try:
         email = EmailStr.validate(form_data.username)
-    except email_validator.EmailNotValidError as e:
+    except EmailError as e:
         raise HTTPException(status_code=400, detail="Username must be a valid email")
 
     user = crud.user.authenticate(
