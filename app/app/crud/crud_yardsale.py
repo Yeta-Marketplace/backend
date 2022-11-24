@@ -29,25 +29,27 @@ class CRUDYardSale(CRUDBase[YardSale, YardSaleCreate, YardSaleUpdate]):
         acos = sqlalchemy.func.ACOS
         radians = sqlalchemy.func.RADIANS
 
-        if distance >= 1000:
-            # Avoids expensive calculation
-            distance_column = 0
-        else:
-            distance_column = (3959 * acos(
-                cos(radians(location.latitude)) * 
-                cos(radians(YardSale.latitude)) * 
-                cos(
-                    radians(YardSale.longitude) - 
-                    radians(location.longitude)
-                ) +
-                sin(radians(location.latitude)) *
-                sin(radians(YardSale.latitude))
-            ))
+        distance_column = (3959 * acos(
+            cos(radians(location.latitude)) * 
+            cos(radians(YardSale.latitude)) * 
+            cos(
+                radians(YardSale.longitude) - 
+                radians(location.longitude)
+            ) +
+            sin(radians(location.latitude)) *
+            sin(radians(YardSale.latitude))
+        ))
 
         today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
 
+        if distance >= 1000:
+            # Avoids expensive calculation
+            distance_filter = True
+        else:
+            distance_filter = distance_column < distance
+
         statement = select(YardSale).add_columns(distance_column.label('distance')).where(
-            (YardSale.end_date >= today) & (distance_column < distance)
+            (YardSale.end_date >= today) & distance_filter
         ).order_by(distance_column, YardSale.end_date).offset(skip).limit(limit)
         results = db.exec(statement)
         return results.all()
