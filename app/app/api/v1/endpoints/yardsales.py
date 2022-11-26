@@ -36,7 +36,7 @@ def read_yardsales(
     """
     Retrieve yard sales.
     """
-    monitor_location(location)
+    # monitor_location(location)
     yardsales = crud.yardsale.get_multi_near_location(db, location=location, distance=distance, skip=skip, limit=limit)
     return yardsales
 
