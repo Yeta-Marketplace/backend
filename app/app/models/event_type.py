@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel, Relationship
 from datetime import date, datetime
 
 if TYPE_CHECKING:
-    from .yard_sale import YardSale
+    from .event import YardSale
     from .user import User
 
 

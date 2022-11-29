@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 if TYPE_CHECKING:
-    from .yard_sale import YardSale
+    from .event import YardSale
     from .feedback import Feedback
 
 class UserBase(SQLModel):

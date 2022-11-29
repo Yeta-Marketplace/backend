@@ -5,7 +5,7 @@ from .token import Token, TokenPayload
 
 # Main
 from .user import User, UserCreate, UserRead, UserUpdate
-from .yard_sale import YardSale, YardSaleCreate, YardSaleRead, YardSaleUpdate
+from .event import YardSale, YardSaleCreate, YardSaleRead, YardSaleUpdate
 from .feedback import Feedback, FeedbackCreate, FeedbackRead, FeedbackUpdate
 from .event_type import EventType, EventTypeCreate, EventTypeRead, EventTypeUpdate
 
