@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel, Relationship
 from datetime import date, datetime
 
 if TYPE_CHECKING:
-    from .event import YardSale
+    from .event import Event
     from .user import User
 
 
@@ -17,7 +17,7 @@ class EventTypeBase(SQLModel):
 class EventType(EventTypeBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
-    events: list["YardSale"] = Relationship(back_populates="event_type")
+    events: list["Event"] = Relationship(back_populates="event_type")
 
 
 class EventTypeCreate(EventTypeBase):

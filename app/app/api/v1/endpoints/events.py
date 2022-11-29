@@ -25,8 +25,8 @@ def monitor_location(location: models.Location):
         locations.add(new_location)
 
 
-@router.get("/", response_model=List[models.YardSaleRead])
-def read_yardsales(
+@router.get("/", response_model=List[models.EventRead])
+def read_events(
     db: Session = Depends(deps.get_session),
     location: models.Location = Depends(),
     distance: float = 25,
@@ -34,43 +34,43 @@ def read_yardsales(
     limit: int = 100,
 ) -> Any:
     """
-    Retrieve yard sales.
+    Retrieve events.
     """
     # monitor_location(location)
-    yardsales = crud.yardsale.get_multi_near_location(db, location=location, distance=distance, skip=skip, limit=limit)
-    return yardsales
+    events = crud.event.get_multi_near_location(db, location=location, distance=distance, skip=skip, limit=limit)
+    return events
 
 
-@router.post("/", response_model=models.YardSaleRead)
-def create_yardsale(
+@router.post("/", response_model=models.EventRead)
+def create_event(
     *,
     db: Session = Depends(deps.get_session),
-    yardsale_in: models.YardSaleCreate,
+    event_in: models.EventCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Create new yard sale.
+    Create new event.
     """
-    # if not is_located_in_US(yardsale_in.latitude, yardsale_in.longitude):
+    # if not is_located_in_US(event_in.latitude, event_in.longitude):
     #     raise HTTPException(
     #         status_code=400, detail="Only supports US locations."
     #     )
-    yardsale = crud.yardsale.create(db, obj_in=yardsale_in, user_id=current_user.id)
-    return yardsale
+    event = crud.event.create(db, obj_in=event_in, user_id=current_user.id)
+    return event
 
 
-# @router.post("/open", response_model=models.YardSaleRead)
-# def create_yardsale_open(
+# @router.post("/open", response_model=models.EventRead)
+# def create_event_open(
 #     *,
 #     db: Session = Depends(deps.get_session),
-#     yardsale_in: models.YardSaleCreate,
+#     event_in: models.EventCreate,
 # ) -> Any:
 #     """
-#     Create new yard sale.
+#     Create new event.
 #     """
-#     if not is_located_in_US(yardsale_in.latitude, yardsale_in.longitude):
+#     if not is_located_in_US(event_in.latitude, event_in.longitude):
 #         raise HTTPException(
 #             status_code=400, detail="Only supports US locations."
 #         )
-#     yardsale = crud.yardsale.create(db, obj_in=yardsale_in)
-#     return yardsale
+#     event = crud.event.create(db, obj_in=event_in)
+#     return event

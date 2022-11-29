@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 if TYPE_CHECKING:
-    from .event import YardSale
+    from .event import Event
     from .feedback import Feedback
 
 class UserBase(SQLModel):
@@ -23,7 +23,7 @@ class User(UserBase, table=True):
 
     created_on: datetime = Field(default_factory=datetime.utcnow)
 
-    yard_sales: list["YardSale"] = Relationship(back_populates="user")
+    events: list["Event"] = Relationship(back_populates="user")
     feedbacks: list["Feedback"] = Relationship(back_populates="user")
 
 

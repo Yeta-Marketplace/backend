@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .event_type import EventType
 
 
-class YardSaleBase(SQLModel):
+class EventBase(SQLModel):
     description: Optional[str]
 
     latitude: float = Field(ge=-90, le=90)
@@ -19,11 +19,11 @@ class YardSaleBase(SQLModel):
 
 
 
-class YardSale(YardSaleBase, table=True):
+class Event(EventBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    user: Optional["User"] = Relationship(back_populates="yard_sales")
+    user: Optional["User"] = Relationship(back_populates="events")
     
     event_type_id: int = Field(default=1, foreign_key="eventtype.id", nullable=False)
     event_type: "EventType" = Relationship(back_populates="events")
@@ -31,15 +31,15 @@ class YardSale(YardSaleBase, table=True):
     created_on: datetime = Field(default_factory=datetime.utcnow)
 
 
-class YardSaleCreate(YardSaleBase):
+class EventCreate(EventBase):
     pass
 
 
-class YardSaleRead(YardSaleBase):
+class EventRead(EventBase):
     id: int
 
 
-class YardSaleUpdate(SQLModel):
+class EventUpdate(SQLModel):
     description: Optional[str]
 
     start_date: Optional[date]
