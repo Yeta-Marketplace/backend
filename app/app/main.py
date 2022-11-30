@@ -18,7 +18,7 @@ def custom_generate_unique_id(route: APIRoute):
 
 app = FastAPI(
     # Uncomment line below when generating frontend client via openapi.json
-    # generate_unique_id_function=custom_generate_unique_id,
+    generate_unique_id_function=custom_generate_unique_id,
     title=settings.PROJECT_NAME, 
     # openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
@@ -37,6 +37,6 @@ if settings.BACKEND_CORS_ORIGINS:
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.get("/")
-def read_root():
-    return {"for documentaion go to": "/docs"}
+# @app.get("/")
+# def read_root():
+#     return {"for documentaion go to": "/docs"}
